@@ -10,6 +10,8 @@ from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+import os
+
 # Optional: add contact me email functionality (Day 60)
 # import smtplib
 
@@ -29,7 +31,7 @@ This will install the packages from the requirements.txt for this project.
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
@@ -53,10 +55,13 @@ gravatar = Gravatar(app,
                     use_ssl=False,
                     base_url=None)
 
+
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
